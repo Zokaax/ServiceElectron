@@ -1,0 +1,665 @@
+    <style>
+        .card {
+            border-radius: 0.75rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 0.5rem;
+        }
+
+        .btn {
+            border-radius: 0.5rem;
+        }
+
+        .bios-item-card {
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border-left: 5px solid #0d6efd;
+            /* Color primario de Bootstrap */
+        }
+
+        .bios-item-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+        }
+
+        .list-group-item-action:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Estilo para el botón de descarga en el modal */
+        .download-btn {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.3rem;
+        }
+    </style>
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center text-gray-900">Gestión de Archivos BIOS</h2>
+
+        <div class="card mb-5">
+            <div class="card-header py-3 bg-primary text-white">
+                <h6 class="m-0 font-weight-bold">Subir Nueva BIOS</h6>
+            </div>
+            <div class="card-body">
+                <form id="uploadBiosForm">
+                    <div class="mb-3">
+                        <label for="biosName" class="form-label">Nombre de la BIOS (Ej: Dell Latitude E7470 A15)</label>
+                        <input type="text" class="form-control" id="biosName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deviceModel" class="form-label">Modelo del Equipo (Ej: Latitude E7470)</label>
+                        <input type="text" class="form-control" id="deviceModel" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deviceType" class="form-label">Tipo de Equipo</label>
+                        <select class="form-select" id="deviceType" required>
+                            <option value="">Seleccione un tipo</option>
+                            <option value="PC">PC (Desktop)</option>
+                            <option value="Laptop">Laptop</option>
+                            <option value="AIO">All-in-One (AIO)</option>
+                            <option value="Tablet">Tablet</option>
+                            <option value="Printer">Impresora</option>
+                            <option value="Server">Servidor</option>
+                            <option value="Other">Otro</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="biosFiles" class="form-label">Archivos de BIOS (Múltiples archivos)</label>
+                        <input type="file" class="form-control" id="biosFiles" multiple required>
+                        <div class="form-text">Puedes seleccionar varios archivos (ej: .bin, .rom, .exe, .txt).</div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Guardar BIOS</button>
+                </form>
+                <div id="uploadMessage" class="mt-3"></div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header py-3 bg-info text-white">
+                <h6 class="m-0 font-weight-bold">Buscar BIOS Almacenadas</h6>
+            </div>
+            <div class="card-body">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="searchBiosInput" placeholder="Buscar por nombre o modelo de equipo...">
+                    <button class="btn btn-info" type="button" id="searchBiosBtn">Buscar</button>
+                </div>
+                <div id="biosSearchResults" class="list-group">
+                </div>
+                <nav aria-label="Page navigation" class="mt-3">
+                    <ul class="pagination justify-content-center" id="biosPagination">
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="biosDetailModal" tabindex="-1" aria-labelledby="biosDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content rounded-3 shadow">
+                <div class="modal-header bg-primary text-white rounded-top-3">
+                    <h5 class="modal-title" id="biosDetailModalLabel">Detalles de BIOS</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editBiosForm">
+                        <input type="hidden" id="modalBiosId">
+                        <div class="mb-3">
+                            <label for="modalBiosName" class="form-label">Nombre de la BIOS:</label>
+                            <input type="text" class="form-control" id="modalBiosName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="modalDeviceModel" class="form-label">Modelo del Equipo:</label>
+                            <input type="text" class="form-control" id="modalDeviceModel">
+                        </div>
+                        <div class="mb-3">
+                            <label for="modalDeviceType" class="form-label">Tipo de Equipo:</label>
+                            <select class="form-select" id="modalDeviceType">
+                                <option value="PC">PC (Desktop)</option>
+                                <option value="Laptop">Laptop</option>
+                                <option value="AIO">All-in-One (AIO)</option>
+                                <option value="Tablet">Tablet</option>
+                                <option value="Printer">Impresora</option>
+                                <option value="Server">Servidor</option>
+                                <option value="Other">Otro</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Archivos Asociados:</label>
+                            <ul id="modalBiosFilesList" class="list-group">
+                            </ul>
+                            <div class="form-text">Para añadir o reemplazar archivos, tendrás que hacerlo desde la sección de carga o una funcionalidad de edición de archivos más avanzada en el backend.</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="saveBiosChanges">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Referencias a elementos del DOM ---
+            const uploadBiosForm = document.getElementById('uploadBiosForm');
+            const biosNameInput = document.getElementById('biosName');
+            const deviceModelInput = document.getElementById('deviceModel');
+            const deviceTypeSelect = document.getElementById('deviceType');
+            const biosFilesInput = document.getElementById('biosFiles');
+            const uploadMessageDiv = document.getElementById('uploadMessage');
+
+            const searchBiosInput = document.getElementById('searchBiosInput');
+            const searchBiosBtn = document.getElementById('searchBiosBtn');
+            const biosSearchResultsDiv = document.getElementById('biosSearchResults');
+            const biosPaginationNav = document.getElementById('biosPagination'); // Elemento para la paginación
+
+            const biosDetailModal = new bootstrap.Modal(document.getElementById('biosDetailModal'));
+            const modalBiosId = document.getElementById('modalBiosId');
+            const modalBiosName = document.getElementById('modalBiosName');
+            const modalDeviceModel = document.getElementById('modalDeviceModel');
+            const modalDeviceType = document.getElementById('modalDeviceType');
+            const modalBiosFilesList = document.getElementById('modalBiosFilesList');
+            const saveBiosChangesBtn = document.getElementById('saveBiosChanges');
+
+            // --- Datos de BIOS (Simulados) ---
+            // En una aplicación real, estos datos vendrían de tu servidor.
+            // Los 'files' aquí serían solo los nombres de archivo, no el contenido real.
+            let biosEntries = [{
+                    id: 1,
+                    name: 'Dell Latitude E7470 A15',
+                    model: 'Latitude E7470',
+                    type: 'Laptop',
+                    files: ['E7470_A15.bin', 'update_guide.pdf']
+                },
+                {
+                    id: 2,
+                    name: 'HP ProDesk 400 G5 F.08',
+                    model: 'ProDesk 400 G5',
+                    type: 'PC',
+                    files: ['F08_ROM.bin', 'flash_utility.exe']
+                },
+                {
+                    id: 3,
+                    name: 'Lenovo ThinkPad X1 Carbon Gen 7 N2WET32W',
+                    model: 'ThinkPad X1 Carbon Gen 7',
+                    type: 'Laptop',
+                    files: ['N2WET32W.iso']
+                },
+                {
+                    id: 4,
+                    name: 'Dell OptiPlex 7070 1.2.3',
+                    model: 'OptiPlex 7070',
+                    type: 'PC',
+                    files: ['7070_1_2_3.exe']
+                },
+                {
+                    id: 5,
+                    name: 'Samsung Galaxy Tab S7 T870XXU2BUE1',
+                    model: 'Galaxy Tab S7',
+                    type: 'Tablet',
+                    files: ['T870XXU2BUE1.tar.md5']
+                },
+                {
+                    id: 6,
+                    name: 'Epson EcoTank L3150 Firmware 1.0.1',
+                    model: 'EcoTank L3150',
+                    type: 'Printer',
+                    files: ['L3150_FW.zip']
+                },
+                {
+                    id: 7,
+                    name: 'Dell PowerEdge R740 2.10.0',
+                    model: 'PowerEdge R740',
+                    type: 'Server',
+                    files: ['R740_BIOS_2.10.0.bin', 'README.txt']
+                },
+                {
+                    id: 8,
+                    name: 'Acer Aspire 5 A515-56 1.05',
+                    model: 'Aspire 5 A515-56',
+                    type: 'Laptop',
+                    files: ['A515_56_1.05.zip']
+                },
+                {
+                    id: 9,
+                    name: 'HP EliteBook 840 G6 01.04.01',
+                    model: 'EliteBook 840 G6',
+                    type: 'Laptop',
+                    files: ['840G6_01.04.01.bin']
+                },
+                {
+                    id: 10,
+                    name: 'Asus ROG Strix G15 G513QM 310',
+                    model: 'ROG Strix G15 G513QM',
+                    type: 'PC',
+                    files: ['G513QM_310.zip', 'flash_tool.exe']
+                },
+                {
+                    id: 11,
+                    name: 'Dell XPS 13 9300 1.5.0',
+                    model: 'XPS 13 9300',
+                    type: 'Laptop',
+                    files: ['9300_1.5.0.bin']
+                },
+                {
+                    id: 12,
+                    name: 'Microsoft Surface Pro 7 11.0.1',
+                    model: 'Surface Pro 7',
+                    type: 'Tablet',
+                    files: ['SurfacePro7_11.0.1.msi']
+                },
+                {
+                    id: 13,
+                    name: 'Canon PIXMA G3410 1.02',
+                    model: 'PIXMA G3410',
+                    type: 'Printer',
+                    files: ['G3410_FW_1.02.zip']
+                },
+                {
+                    id: 14,
+                    name: 'Dell Latitude 5420 1.3.0',
+                    model: 'Latitude 5420',
+                    type: 'Laptop',
+                    files: ['5420_1.3.0.bin']
+                },
+                {
+                    id: 15,
+                    name: 'HP Pavilion 15-cs0000 01.10.00',
+                    model: 'Pavilion 15-cs0000',
+                    type: 'Laptop',
+                    files: ['15cs_01.10.00.exe']
+                },
+                {
+                    id: 16,
+                    name: 'Lenovo Legion 5 15IMH05H FSCN20WW',
+                    model: 'Legion 5 15IMH05H',
+                    type: 'Laptop',
+                    files: ['FSCN20WW.zip']
+                },
+                {
+                    id: 17,
+                    name: 'Dell Precision 3560 1.0.0',
+                    model: 'Precision 3560',
+                    type: 'Laptop',
+                    files: ['3560_1.0.0.bin']
+                },
+                {
+                    id: 18,
+                    name: 'Asus VivoBook 15 X512DA 306',
+                    model: 'VivoBook 15 X512DA',
+                    type: 'Laptop',
+                    files: ['X512DA_306.zip']
+                },
+                {
+                    id: 19,
+                    name: 'HP ZBook Studio G7 01.01.00',
+                    model: 'ZBook Studio G7',
+                    type: 'Laptop',
+                    files: ['StudioG7_01.01.00.bin']
+                },
+                {
+                    id: 20,
+                    name: 'Dell XPS 15 9500 1.7.0',
+                    model: 'XPS 15 9500',
+                    type: 'Laptop',
+                    files: ['9500_1.7.0.bin', 'readme.txt']
+                },
+                {
+                    id: 21,
+                    name: 'Dell Latitude E7470 A16',
+                    model: 'Latitude E7470',
+                    type: 'Laptop',
+                    files: ['E7470_A16.bin']
+                },
+                {
+                    id: 22,
+                    name: 'HP ProBook 450 G8 F.10',
+                    model: 'ProBook 450 G8',
+                    type: 'Laptop',
+                    files: ['F10_ROM.bin']
+                },
+                {
+                    id: 23,
+                    name: 'Lenovo ThinkPad T14 Gen 2 R1GET53W',
+                    model: 'ThinkPad T14 Gen 2',
+                    type: 'Laptop',
+                    files: ['R1GET53W.iso']
+                },
+                {
+                    id: 24,
+                    name: 'Dell OptiPlex 5090 1.0.0',
+                    model: 'OptiPlex 5090',
+                    type: 'PC',
+                    files: ['5090_1_0_0.exe']
+                },
+                {
+                    id: 25,
+                    name: 'Samsung Galaxy Book Pro 360 NP950QDB',
+                    model: 'Galaxy Book Pro 360',
+                    type: 'Laptop',
+                    files: ['NP950QDB.bin']
+                },
+                {
+                    id: 26,
+                    name: 'Brother MFC-L2710DW Firmware 1.0.0',
+                    model: 'MFC-L2710DW',
+                    type: 'Printer',
+                    files: ['L2710DW_FW.zip']
+                },
+                {
+                    id: 27,
+                    name: 'Dell PowerEdge T350 1.0.0',
+                    model: 'PowerEdge T350',
+                    type: 'Server',
+                    files: ['T350_BIOS_1.0.0.bin']
+                },
+                {
+                    id: 28,
+                    name: 'Acer Predator Helios 300 PH315-53 1.0.0',
+                    model: 'Predator Helios 300 PH315-53',
+                    type: 'Laptop',
+                    files: ['PH315_53_1.0.0.zip']
+                },
+                {
+                    id: 29,
+                    name: 'HP Spectre x360 14-ea0000 01.02.00',
+                    model: 'Spectre x360 14-ea0000',
+                    type: 'Laptop',
+                    files: ['14ea_01.02.00.bin']
+                },
+                {
+                    id: 30,
+                    name: 'Asus TUF Gaming A15 FA506QM 307',
+                    model: 'TUF Gaming A15 FA506QM',
+                    type: 'Laptop',
+                    files: ['FA506QM_307.zip']
+                }
+            ];
+            let nextBiosId = biosEntries.length > 0 ? Math.max(...biosEntries.map(b => b.id)) + 1 : 1;
+
+            // --- Variables de Paginación ---
+            const itemsPerPage = 10;
+            let currentPage = 1;
+            let currentFilteredBios = []; // Para almacenar las BIOS filtradas antes de paginar
+
+            // --- Funciones del Formulario de Carga ---
+            uploadBiosForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Evitar el envío del formulario por defecto
+
+                const name = biosNameInput.value.trim();
+                const model = deviceModelInput.value.trim();
+                const type = deviceTypeSelect.value;
+                const files = biosFilesInput.files; // Objeto FileList
+
+                if (!name || !model || !type || files.length === 0) {
+                    uploadMessageDiv.innerHTML = '<div class="alert alert-danger">Por favor, complete todos los campos y seleccione al menos un archivo.</div>';
+                    return;
+                }
+
+                // En una aplicación real, aquí usarías FormData para enviar los archivos al servidor
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('model', model);
+                formData.append('type', type);
+                for (let i = 0; i < files.length; i++) {
+                    formData.append('biosFiles', files[i]); // 'biosFiles' debe coincidir con el nombre del campo en tu backend (multer)
+                }
+
+                uploadMessageDiv.innerHTML = '<div class="alert alert-info">Subiendo BIOS...</div>';
+
+                // --- SIMULACIÓN DE ENVÍO AL SERVIDOR ---
+                // En tu backend, usarías fetch para enviar esta data a tu API
+                // fetch('/api/bios', {
+                //     method: 'POST',
+                //     body: formData // FormData se envía directamente, no necesita Content-Type
+                // })
+                // .then(response => response.json())
+                // .then(data => {
+                //     if (data.success) {
+                //         uploadMessageDiv.innerHTML = '<div class="alert alert-success">BIOS guardada exitosamente!</div>';
+                //         // Añadir la nueva BIOS a los datos simulados para que aparezca en la búsqueda
+                //         biosEntries.push(data.newBios); // data.newBios vendría del servidor con el ID y nombres de archivo
+                //         uploadBiosForm.reset(); // Limpiar el formulario
+                //         // Resetear la paginación a la primera página y recargar la lista
+                //         currentPage = 1; 
+                //         filterAndRenderBios();
+                //     } else {
+                //         uploadMessageDiv.innerHTML = `<div class="alert alert-danger">Error al guardar BIOS: ${data.message}</div>`;
+                //     }
+                // })
+                // .catch(error => {
+                //     console.error('Error al subir BIOS:', error);
+                //     uploadMessageDiv.innerHTML = '<div class="alert alert-danger">Error de conexión al servidor.</div>';
+                // });
+
+                // Simulación local (eliminar en producción)
+                setTimeout(() => {
+                    const newBios = {
+                        id: nextBiosId++,
+                        name: name,
+                        model: model,
+                        type: type,
+                        files: Array.from(files).map(f => f.name) // Solo los nombres de archivo
+                    };
+                    biosEntries.push(newBios);
+                    uploadMessageDiv.innerHTML = '<div class="alert alert-success">BIOS guardada exitosamente (simulación)!</div>';
+                    uploadBiosForm.reset();
+                    // Después de añadir una nueva BIOS, reseteamos la paginación y actualizamos la lista de búsqueda
+                    currentPage = 1; // Volver a la primera página después de añadir
+                    filterAndRenderBios();
+                    console.log('Nueva BIOS simulada:', newBios);
+                }, 1500); // Simula un retraso de red
+            });
+
+            // --- Funciones de Búsqueda y Renderizado ---
+            function filterAndRenderBios() {
+                const searchTerm = searchBiosInput.value.toLowerCase().trim();
+
+                // Filtrar todas las BIOS primero
+                if (searchTerm === '') {
+                    currentFilteredBios = [...biosEntries]; // Copia el array completo
+                } else {
+                    currentFilteredBios = biosEntries.filter(bios =>
+                        bios.name.toLowerCase().includes(searchTerm) ||
+                        bios.model.toLowerCase().includes(searchTerm)
+                    );
+                }
+
+                // Calcular paginación
+                const totalPages = Math.ceil(currentFilteredBios.length / itemsPerPage);
+                // Asegurarse de que la página actual no exceda el total de páginas
+                if (currentPage > totalPages && totalPages > 0) {
+                    currentPage = totalPages;
+                } else if (totalPages === 0) {
+                    currentPage = 1; // No hay elementos, la página es 1
+                }
+
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const paginatedBios = currentFilteredBios.slice(startIndex, endIndex);
+
+                renderBiosResults(paginatedBios);
+                renderPaginationControls(totalPages);
+            }
+
+            function renderBiosResults(biosList) {
+                biosSearchResultsDiv.innerHTML = ''; // Limpiar resultados anteriores
+
+                if (biosList.length === 0 && searchBiosInput.value.trim() === '') {
+                    biosSearchResultsDiv.innerHTML = `
+                        <div class="text-center text-muted p-3">
+                            <p>No hay BIOS almacenadas. Sube una nueva usando el formulario de arriba.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                if (biosList.length === 0 && searchBiosInput.value.trim() !== '') {
+                    biosSearchResultsDiv.innerHTML = `
+                        <div class="text-center text-muted p-3">
+                            <p>No se encontraron BIOS que coincidan con la búsqueda.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+
+                biosList.forEach(bios => {
+                    const biosItemHtml = `
+                        <button type="button" class="list-group-item list-group-item-action bios-item-card" data-bios-id="${bios.id}">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">${bios.name}</h6>
+                                <small class="text-muted">ID: ${bios.id}</small>
+                            </div>
+                            <p class="mb-1">Modelo: ${bios.model} | Tipo: ${bios.type}</p>
+                            <small>Archivos: ${bios.files.length > 0 ? bios.files.join(', ') : 'N/A'}</small>
+                        </button>
+                    `;
+                    biosSearchResultsDiv.insertAdjacentHTML('beforeend', biosItemHtml);
+                });
+
+                // Añadir event listeners a los nuevos elementos clickeables
+                document.querySelectorAll('.bios-item-card').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const biosId = parseInt(this.dataset.biosId);
+                        const selectedBios = biosEntries.find(b => b.id === biosId);
+                        if (selectedBios) {
+                            openBiosModal(selectedBios);
+                        }
+                    });
+                });
+            }
+
+            // --- Funciones de Paginación ---
+            function renderPaginationControls(totalPages) {
+                biosPaginationNav.innerHTML = ''; // Limpiar controles anteriores
+
+                if (totalPages <= 1) {
+                    return; // No mostrar paginación si solo hay una página o ninguna
+                }
+
+                // Botón "Anterior"
+                const prevItem = document.createElement('li');
+                prevItem.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+                prevItem.innerHTML = `<a class="page-link" href="#" data-page="${currentPage - 1}">Anterior</a>`;
+                biosPaginationNav.appendChild(prevItem);
+
+                // Números de página
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageItem = document.createElement('li');
+                    pageItem.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                    pageItem.innerHTML = `<a class="page-link" href="#" data-page="${i}">${i}</a>`;
+                    biosPaginationNav.appendChild(pageItem);
+                }
+
+                // Botón "Siguiente"
+                const nextItem = document.createElement('li');
+                nextItem.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+                nextItem.innerHTML = `<a class="page-link" href="#" data-page="${currentPage + 1}">Siguiente</a>`;
+                biosPaginationNav.appendChild(nextItem);
+
+                // Añadir event listeners a los enlaces de paginación
+                biosPaginationNav.querySelectorAll('.page-link').forEach(link => {
+                    link.addEventListener('click', function(event) {
+                        event.preventDefault(); // Evitar que el enlace recargue la página
+                        const newPage = parseInt(this.dataset.page);
+                        if (newPage > 0 && newPage <= totalPages && newPage !== currentPage) {
+                            currentPage = newPage;
+                            filterAndRenderBios(); // Volver a filtrar y renderizar para la nueva página
+                        }
+                    });
+                });
+            }
+
+
+            // --- Lógica del Modal ---
+            function openBiosModal(bios) {
+                modalBiosId.value = bios.id;
+                modalBiosName.value = bios.name;
+                modalDeviceModel.value = bios.model;
+                modalDeviceType.value = bios.type;
+
+                modalBiosFilesList.innerHTML = ''; // Limpiar lista de archivos
+                if (bios.files && bios.files.length > 0) {
+                    bios.files.forEach(file => {
+                        const listItem = document.createElement('li');
+                        listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                        listItem.innerHTML = `
+                            <span>${file}</span>
+                            <a href="/api/bios/download/${bios.id}/${encodeURIComponent(file)}" class="btn btn-sm btn-outline-primary download-btn" download="${file}">Descargar</a>
+                        `;
+                        modalBiosFilesList.appendChild(listItem);
+                    });
+                } else {
+                    modalBiosFilesList.innerHTML = '<li class="list-group-item text-muted">No hay archivos asociados.</li>';
+                }
+
+                biosDetailModal.show();
+            }
+
+            saveBiosChangesBtn.addEventListener('click', function() {
+                const id = parseInt(modalBiosId.value);
+                const updatedBios = {
+                    id: id,
+                    name: modalBiosName.value.trim(),
+                    model: modalDeviceModel.value.trim(),
+                    type: modalDeviceType.value,
+                    // Los archivos no se editan directamente desde aquí, solo se muestran
+                    files: biosEntries.find(b => b.id === id) ? files : []
+                };
+
+                // --- SIMULACIÓN DE ACTUALIZACIÓN AL SERVIDOR ---
+                // fetch('/api/bios/' + id, {
+                //     method: 'PUT',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify(updatedBios)
+                // })
+                // .then(response => response.json())
+                // .then(data => {
+                //     if (data.success) {
+                //         console.log('BIOS actualizada en el servidor:', data);
+                //         const index = biosEntries.findIndex(b => b.id === id);
+                //         if (index !== -1) {
+                //             biosEntries[index] = updatedBios; // O data.updatedBios si tu servidor devuelve el objeto completo
+                //         }
+                //         filterAndRenderBios(); // Volver a renderizar si es necesario
+                //         biosDetailModal.hide();
+                //     } else {
+                //         alert('Error al actualizar BIOS: ' + data.message);
+                //     }
+                // })
+                // .catch(error => {
+                //     console.error('Error al actualizar BIOS:', error);
+                //     alert('Error de conexión al servidor al actualizar.');
+                // });
+
+                // Simulación de actualización local (eliminar en producción)
+                const index = biosEntries.findIndex(r => r.id === id);
+                if (index !== -1) {
+                    biosEntries[index] = updatedBios;
+                    console.log('BIOS actualizada localmente (simulación):', updatedBios);
+                }
+                filterAndRenderBios(); // Volver a renderizar si es necesario
+                biosDetailModal.hide();
+            });
+
+            // --- Event Listeners Iniciales ---
+            // El botón de búsqueda ahora solo se necesita si quieres un "disparador" manual además del live search
+            // searchBiosBtn.addEventListener('click', filterAndRenderBios); 
+
+            // FILTRAR A MEDIDA QUE SE ESCRIBE (LIVE SEARCH)
+            searchBiosInput.addEventListener('input', function() {
+                currentPage = 1; // Resetear a la primera página al cambiar el término de búsqueda
+                filterAndRenderBios();
+            });
+
+            // Cargar todas las BIOS al inicio
+            filterAndRenderBios();
+        });
+    </script>

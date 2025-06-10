@@ -1,0 +1,60 @@
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Nuevo Pago</h4>
+    </div>
+    <div class="card-body">
+        <form id="addPaymentForm" autocomplete="off">
+
+            <div class="mb-3">
+                <label for="methodSelect" class="form-label">Metodo: </label>
+                <select class="form-select" id="methodSelect" name="method" required>
+                    <option value="" selected disabled>Seleccione Metodo</option>
+                    <option value="PROVINCIAL">PROVINCIAL</option>
+                    <option value="BANCAMIGA">BANCAMIGA</option>
+                    <option value="BOLIVARES EFECTIVO">BOLIVARES EFECTIVO</option>
+                    <option value="DIVISAS">DIVISAS</option>
+                    <option value="BINANCE">BINANCE</option>
+                    <option value="CRUCE">CRUCE</option>
+                    <option value="OTRO">OTRO</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="paymentReceptionSearch" class="form-label">Buscar Recepcion</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="paymentReceptionSearch" required placeholder="Estado o pedido" name="receptionId">
+                    <div id="searchReceptionsResults" class="list-group mt-5" style=" position: absolute; z-index: 1000; width: 100%;
+                    max-height: 300px; overflow-y: auto; display: none;">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+                <label for="saintInvoiceInput" class="form-label">Factura</label>
+                <input type="text" class="form-control" id="saintInvoiceInput" name="saintInvoice" placeholder="Ingrese factura del sistema">
+            </div>
+
+            <div class="mb-3">
+                <label for="referenceInput" class="form-label">Referencia</label>
+                <input type="text" class="form-control" id="referenceInput" name="reference" placeholder="Ingrese la referencia del banco">
+            </div>
+
+            <div class="mb-3">
+                <label for="dolarsInput" class="form-label">Dolares</label>
+                <input type="text" class="form-control" id="dolarsInput" name="amoutDolar" placeholder="Ingrese la cantidad en dolares">
+            </div>
+
+            <div class="mb-3">
+                <label for="bolivarsInput" class="form-label">Bolivares</label>
+                <input type="text" class="form-control" id="bolivarsInput" name="amoutBolivar" placeholder="Ingrese la cantidad en bolivares">
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button id="submitAddPayment" class="btn btn-primary">
+                    <i class="fas fa-paper-plane me-2"></i> Registrar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,34 @@
+<div class="card mb-4 col-12">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Opciones de Filtro</h6>
+    </div>
+    <div class="card-body">
+        <div class="row g-3 align-items-center">
+            <div class="col-md-4">
+                <label for="startDate" class="form-label text-gray-800">Fecha de Inicio:</label>
+                <input type="date" class="form-control" id="startDate">
+            </div>
+            <div class="col-md-4">
+                <label for="endDate" class="form-label text-gray-800">Fecha de Fin:</label>
+                <input type="date" class="form-control" id="endDate">
+            </div>
+            <div class="col-md-2">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="filterByDateEnd" role="switch">
+                    <label class="form-check-label text-gray-800" for="filterByDateEnd">Filtrar por Fecha de Cierre</label>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-primary w-100" id="generateReportPDFBtn">Generar PDF</button>
+                <button type="button" class="btn btn-primary w-100 mt-1" id="generateReportBtn">Generar Reporte</button>
+                <small class="text-xs" id="totalReceptions">Total: 0</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="reportsOutput" class="mt-4 col-12 p-0">
+    <div class="text-center text-muted p-5">
+        <p>Selecciona un rango de fechas y haz clic en "Generar Reporte" para ver los resultados.</p>
+    </div>
+</div>

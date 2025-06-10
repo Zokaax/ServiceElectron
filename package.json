@@ -1,0 +1,19 @@
+{
+  "name": "serviceelectron",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "scripts": {
+    "dev": "electron ."
+  },
+  "peerDependencies": {},
+  "dependencies": {
+    "axios": "^1.9.0",
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "electron": "^36.4.0",
+    "express": "^5.1.0"
+  }
+}

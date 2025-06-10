@@ -1,0 +1,37 @@
+## API
+### recuperar informacion de todos los clientes
+GET http://localhost:3000/api/clients
+
+### recuperar informacion de clientes
+GET http://localhost:3000/api/clients/like?name=cor
+
+### enviando informacion para agregar un client
+POST http://localhost:3000/api/clients
+Content-Type: application/json
+access: asdpfijaogifj243i5j3245908230j2poifj08u243jskdjfwjj3ij2pkmfsdf
+
+{
+    "name": "corlos",
+    "phone": "12314513"
+}
+
+### enviando informacion para actualizar o agregar un client
+PUT http://localhost:3000/api/clients/23
+Content-Type: application/json
+
+{
+    "name": "jiren",
+    "phone": "asasdasd"
+    
+}
+
+### enviando informacion para actualizar parte de un client
+PATCH http://localhost:3000/api/clients/24
+Content-Type: application/json
+
+{
+    "name":"Carlos LarTropa"
+}
+
+### eliminar informacion de un cliente
+DELETE http://localhost:3000/api/clients/34

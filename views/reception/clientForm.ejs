@@ -1,0 +1,22 @@
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Nuevo Cliente</h4>
+    </div>
+    <div class="card-body">
+        <form id="addClientForm" autocomplete="off">
+            <div class="mb-3">
+                <label for="clientName" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="clientName" name="name" required placeholder="Ingrese el nombre del cliente">
+            </div>
+            <div class="mb-3">
+                <label for="phoneNumber" class="form-label">Teléfono</label>
+                <input type="tel" class="form-control" id="phoneNumber" name="phone" placeholder="Ingrese el número de teléfono">
+            </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button id="submitAddClient" class="btn btn-primary">
+                    <i class="fas fa-paper-plane me-2"></i> Registrar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

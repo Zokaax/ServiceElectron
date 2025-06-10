@@ -1,0 +1,117 @@
+<div class="container">
+    <h2 class="mb-4 text-center text-gray-900">Reportes de Recepciones</h2>
+
+    <div class="row">
+        <%- include('receptionList.ejs') %>
+    </div>
+
+    <%- include('modalReception.ejs') %>
+</div>
+
+<script src="assets/js/front/report/receptionList.js"></script>
+
+<style>
+    .card {
+        border-radius: 0.75rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: 0.5rem;
+    }
+
+    .btn {
+        border-radius: 0.5rem;
+    }
+
+    .recepcion-item-card {
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        border-left: 5px solid;
+        /* Para el color del estado */
+    }
+
+    .recepcion-item-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    }
+
+    /* Colores de estado (similares a los de tu EJS) */
+    .status-EN-PROCESO {
+        border-color: #ced4da;
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
+
+    /* light */
+    .status-COBRADO {
+        border-color: #28a745;
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    /* success */
+    .status-PENDIENTE {
+        border-color: #dc3545;
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    /* danger */
+    .status-DEVOLUCION {
+        border-color: #17a2b8;
+        background-color: #d1ecf1;
+        color: #0c5460;
+    }
+
+    /* info */
+    .status-PAGADO {
+        border-color: #ffc107;
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    /* warning */
+    .status-GARANTIA {
+        border-color: #6c757d;
+        background-color: #e2e6ea;
+        color: #343a40;
+    }
+
+    /* secondary */
+    .status-CRUCE {
+        border-color: #6f42c1;
+        background-color: #e6dff9;
+        color: #4b2a82;
+    }
+
+    /* purple-like */
+    .status-ELIMINADA {
+        border-color: #6c757d;
+        background-color: #e2e6ea;
+        color: #343a40;
+    }
+
+    /* secondary */
+    .status-OTRO {
+        border-color: #007bff;
+        background-color: #e7f3ff;
+        color: #004085;
+    }
+
+    /* primary */
+
+    .status-header {
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 0;
+        background-color: #e9ecef;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        border-top-left-radius: calc(0.75rem - 1px);
+        border-top-right-radius: calc(0.75rem - 1px);
+    }
+
+    .status-group {
+        margin-bottom: 2rem;
+    }
+</style>

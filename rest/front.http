@@ -1,0 +1,17 @@
+
+###FRONT
+### pagina index
+GET http://localhost:3000/
+
+### pagina de reportes
+GET http://localhost:3000/reportes
+
+### pagina recepciones
+GET http://localhost:3000/recepciones
+
+
+
+
+
+
+

@@ -1,0 +1,79 @@
+<div class="modal fade" id="receptionDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content rounded-3 shadow">
+            <div class="modal-header bg-primary text-white rounded-top-3">
+                <h5 class="modal-title" id="receptionDetailModalLabel">Detalles de Recepción</h5>
+            </div>
+            <div class="modal-body">
+                <form id="editReceptionForm">
+                    <input type="hidden" id="modalReceptionId">
+                    <div class="row">
+                        <div class="mb-3 col-6">
+                            <label for="modalSaintOrder" class="form-label">Numero de pedido:</label>
+                            <input type="number" class="form-control" id="modalSaintOrder">
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="modalSaintInvoice" class="form-label">Factura:</label>
+                            <input type="number" class="form-control" id="modalSaintInvoice" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="modalDateStart" class="form-label">Fecha de Entrada:</label>
+                            <input type="date" class="form-control" id="modalDateStart">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="modalDateEnd" class="form-label">Fecha de Cierre:</label>
+                            <input type="date" class="form-control" id="modalDateEnd">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="modalClientName" class="form-label">Nombre del cliente:</label>
+                            <input type="text" class="form-control" id="modalClientName" readonly>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="modalDevice" class="form-label">Dispositivo:</label>
+                            <input type="text" class="form-control" id="modalDevice" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3 col-6">
+                            <label for="modalClientIssue" class="form-label">Problema del Equipo:</label>
+                            <textarea class="form-control" id="modalClientIssue" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3 col-6">
+                            <label for="modalWorkDone" class="form-label">Trabajo Realizado:</label>
+                            <textarea class="form-control" id="modalWorkDone" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3 col-6">
+                            <label for="modalReceptionAmoutDolars" class="form-label">Costo del servicio:</label>
+                            <input type="number" class="form-control" id="modalReceptionAmoutDolars">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="modalStatus" class="form-label">Estado:</label>
+                        <select class="form-select" id="modalStatus">
+                            <option value="EN PROCESO">EN PROCESO</option>
+                            <option value="PENDIENTE">PENDIENTE</option>
+                            <option value="COBRADO">COBRADO</option>
+                            <option value="PAGADO">PAGADO</option>
+                            <option value="GARANTIA">GARANTIA</option>
+                            <option value="CRUCE">CRUCE</option>
+                            <option value="DEVOLUCION">DEVOLUCION</option>
+                            <option value="ELIMINADA">ELIMINADA</option>
+                            <option value="OTRO">OTRO</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="saveReceptionChanges">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>

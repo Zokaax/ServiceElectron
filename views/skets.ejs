@@ -1,0 +1,246 @@
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Estado</th>
+            <th>Pedido</th>
+            <th>Fecha de Entrada</th>
+            <th>Cliente</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>Estado</th>
+            <th>Fecha de Entrada</th>
+            <th>Pedido</th>
+            <th>Cliente</th>
+        </tr>
+    </tfoot>
+    <tbody>
+
+        <% if (recepciones && recepciones.length > 0) { %>
+        <% recepciones.forEach(recepcion => { %>
+        <tr>
+            <th><%- recepcion.status %></th>
+            <th><%- recepcion.saintOrder %></th>
+            <th><%- recepcion.dateStart %></th>
+            <% if (recepcion.client) { %>
+            <th><%- recepcion.client.name %></th>
+            <% } else { %>
+            <th><% %></th>
+                    <% } %>
+        </tr>
+        <% }); %>
+        <% } else { %>
+        <p>No hay recepciones disponibles.</p>
+        <% } %>
+
+    </tbody>
+</table>
+
+
+
+
+
+<div class="container mt-3">
+
+    <% if (recepciones && recepciones.length > 0) { %>
+    <% recepciones.forEach(recepcion => { %>
+    <div class="row recepcion-item mb-3 border rounded p-3 shadow-sm clickable-row" data-recepcion-id="<%- recepcion._id %>">
+        <div class="col-12 col-md-3 mb-2 mb-md-0">
+            <strong>Estado:</strong> <%- recepcion.status || '' %>
+        </div>
+
+        <div class="col-12 col-md-3 mb-2 mb-md-0">
+            <strong>Pedido:</strong> <%- recepcion.saintOrder %>
+        </div>
+
+        <div class="col-12 col-md-3 mb-2 mb-md-0">
+            <strong>Fecha de Entrada:</strong> <%- recepcion.dateStart || '' %>
+        </div>
+
+        <div class="col-12 col-md-3">
+            <strong>Cliente:</strong> <%= (recepcion.client) ? recepcion.client.name : '' %>
+        </div>
+    </div>
+
+    <% }); %>
+    <% } else { %>
+    <div class="row">
+        <div class="col">
+            <p>No hay recepciones disponibles.</p>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+
+
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Nueva Recepción</h4>
+                </div>
+                <div class="card-body">
+                    <form id="receptionForm">
+                        <div class="mb-3">
+                            <label for="clientName" class="form-label">Cliente</label>
+                            <input type="text" class="form-control" id="clientName" name="clientName" required placeholder="Ingrese el nombre del cliente">
+                        </div>
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Ingrese el número de teléfono" required>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Enviar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('receptionForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Aquí puedes agregar la lógica para manejar el envío del formulario
+        const formData = {
+            clientName: document.getElementById('clientName').value,
+            phoneNumber: document.getElementById('phoneNumber').value
+        };
+
+        console.log('Datos del formulario:', formData);
+        // Ejemplo de cómo podrías hacer una petición al servidor:
+        // fetch('/api/recepciones', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(formData)
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //     console.log('Success:', data);
+        //     // Aquí puedes redirigir o mostrar un mensaje de éxito
+        // })
+        // .catch((error) => {
+        //     console.error('Error:', error);
+        //     // Aquí puedes mostrar un mensaje de error
+        // });
+    });
+</script>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .card-header {
+        padding: 1rem 1.5rem;
+    }
+
+    .form-control:focus {
+        border-color: #4e73df;
+        box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+    }
+
+    .btn-primary {
+        background-color: #4e73df;
+        border: none;
+        padding: 0.5rem 1.5rem;
+    }
+
+    .btn-primary:hover {
+        background-color: #2e59d9;
+    }
+</style>
+
+
+
+
+
+
+<div class="mb-3">
+    <label for="deviceType" class="form-label">Tipo</label>
+    <input type="text" class="form-control" id="deviceType" name="type" required placeholder="Ingrese el tipo de equipo">
+</div>
+<div class="mb-3">
+    <label for="deviceBrand" class="form-label">Marca</label>
+    <input type="text" class="form-control" id="deviceBrand" name="brand" placeholder="Ingrese la marca del equipo">
+</div>
+
+
+
+
+
+
+
+
+
+<% if (recepciones && recepciones.length > 0) { 
+    recepciones.forEach(recepcion => { %>
+
+<% let background = 'bg-gradient-primary';
+              let text = 'text-gray-900 text-lg' %>
+
+<%
+       switch (recepcion.status) {
+           case 'EN PROCESO':
+           background = 'bg-gradient-light';
+           break;
+           case 'COBRADO':
+           background = 'bg-gradient-success';
+           break;
+           case 'PENDIENTE':
+           background = 'bg-gradient-danger';
+           break;
+           case 'DEVOLUCION':
+           background = 'bg-gradient-info';
+           break;
+           case 'PAGADO':
+           background = 'bg-gradient-warning';
+           break;
+           case 'OTRO':
+           background = 'bg-gradient-warning';
+           break;
+           default:
+       }
+       %>
+
+<a href="#" style="text-decoration: none;">
+    <div class="row recepcion-item mb-0 border p-3 clickable-row <%= background %> <%= text %>" data-recepcion-id="<%- recepcion.id %>" data-estado="<%- recepcion.status %>">
+
+        <div class="col-12 col-md-3 mb-2 mb-md-0">
+            <%- recepcion.status || '' %>
+        </div>
+
+        <div class="col-12 col-md-3 mb-2 mb-md-0">
+            <%- recepcion.saintOrder %>
+        </div>
+
+        <div class="col-12 col-md-3 mb-2 mb-md-0">
+            <%- recepcion.dateStart || '' %>
+        </div>
+
+        <div class="col-12 col-md-3">
+            <%= (recepcion.client) ? recepcion.client.name : '' %>
+        </div>
+    </div>
+</a>
+
+<% }); 
+  } else { %>
+<div class="row">
+    <div class="col">
+        <p>No hay recepciones disponibles.</p>
+    </div>
+</div>
+<% } %>

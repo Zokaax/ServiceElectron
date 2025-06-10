@@ -1,0 +1,54 @@
+## API
+### recuperar informacion de las recepciones
+GET http://localhost:3000/api/receptions
+
+### recuperar informacion de varias recepciones
+GET http://localhost:3000/api/receptions?id=1,7,6,3,2,7,8
+
+### recuperar toda la informacion de las recepciones y sus dependencias
+GET http://localhost:3000/api/receptions/like?saintOrder=123
+
+### recuperar toda la informacion de varias recepciones y sus dependencias
+GET http://localhost:3000/api/receptions/like?saintOrder=123
+
+### enviando informacion para agregar una recepcion
+POST http://localhost:3000/api/receptions
+Content-Type: application/json
+
+{
+    "saintOrder":"123123",
+    "saintInvoice":"123123",
+    "dateStart":"2023-10-27",
+    "dateEnd":"2023-10-27",
+    "clientId":24,
+    "deviceId":2,
+    "description":"el señor de la fabrica",
+    "solution":"el señor de la fabrica",
+    "status": "EN PROCESO"
+}
+
+### enviando informacion para actualizar o agregar una recepcion
+PUT http://localhost:3000/api/receptions/2
+Content-Type: application/json
+
+{
+    "saintOrder":"123123",
+    "dateStart":"2023-11-27",
+    "dateEnd":"2024-10-27",
+    "clientId":15,
+    "deviceId":5,
+    "clientIssue":"el señor de la fabrica",
+    "workDone":"el señor de la fabrica",
+    "status": "0412-98512563"
+}
+
+### enviando informacion para actualizar parte de una recepcion
+PATCH http://localhost:3000/api/receptions/6
+Content-Type: application/json
+
+{
+    "clientId":12
+}
+
+### eliminar informacion de una recepcion
+DELETE http://localhost:3000/api/receptions/18

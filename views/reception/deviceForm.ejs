@@ -1,0 +1,47 @@
+<div class="card shadow">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Nuevo Dispositivo</h4>
+    </div>
+    <div class="card-body">
+        <form id="addDeviceForm" autocomplete="off">
+
+            <div class="mb-3">
+                <label for="devicetType" class="form-label">Tipo: </label>
+                <select class="form-select" id="devicetType" name="type" required>
+                    <option value="" selected disabled>Seleccione Tipo</option>
+                    <option value="LAPTOP">LAPTOP</option>
+                    <option value="DESKTOP">DESKTOP</option>
+                    <option value="AIO">AIO</option>
+                    <option value="OTRO">OTRO</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="deviceBrand" class="form-label">Marca</label>
+                <select class="form-select" id="deviceBrand" name="brand">
+                    <option value="" selected disabled>Seleccione la Marca</option>
+                    <option value="Dell">DELL</option>
+                    <option value="Lenovo">LENOVO</option>
+                    <option value="HP">HP</option>
+                    <option value="Gateway">GATEWAY</option>
+                    <option value="Soneview">SONEVIEW</option>
+                    <option value="VIT">VIT</option>
+                    <option value="Samsung">SAMSUNG</option>
+                    <option value="Generico">GENERICO</option>
+                    <option value="OTRO">OTRO</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="deviceModel" class="form-label">Modelo</label>
+                <input type="tel" class="form-control" id="deviceModel" name="model" placeholder="Ingrese el modelo del equipo">
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button id="submitAddDevice" class="btn btn-primary">
+                    <i class="fas fa-paper-plane me-2"></i> Registrar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
