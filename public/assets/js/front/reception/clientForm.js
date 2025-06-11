@@ -1,7 +1,7 @@
 submitForm({
     submitButtonId: 'submitAddClient',
     formId: 'addClientForm',
-    postUrl: '/api/clients',
+    postUrl: 'api/clients',
     onSuccess: (data, form) => {
         if (data.success) {
             form.reset();

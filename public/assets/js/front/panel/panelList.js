@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalDateEnd = document.getElementById('modalDateEnd');
     const modalClientName = document.getElementById('modalClientName');
     const modalDevice = document.getElementById('modalDevice');
-    const modalClientIssue = document.getElementById('modalClientIssue');
-    const modalWorkDone = document.getElementById('modalWorkDone');
+    const modalDescription = document.getElementById('modalDescription');
+    const modalSolution = document.getElementById('modalSolution');
     const modalReceptionAmoutDolars = document.getElementById('modalReceptionAmoutDolars');
     const modalStatus = document.getElementById('modalStatus');
     const saveReceptionChangesBtn = document.getElementById('saveReceptionChanges');
@@ -44,8 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function filterReceptions() {
 
-        const receptions = await fetch(`api/receptions/full`)
-            .then(response => response.json())
+        const receptions = await window.API.getData('api/receptions/full')
             .then(json => json.data)
             .catch(error => console.log(error)) || []
 
@@ -117,9 +116,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 listGroup.insertAdjacentHTML('beforeend', receptionItemHtml);
             });
-
-
-
             reportsOutput.appendChild(statusGroupDiv);
         });
 
@@ -145,13 +141,13 @@ document.addEventListener('DOMContentLoaded', function() {
         modalDateEnd.value = reception.dateEnd;
         modalClientName.value = reception.client.name;
         modalDevice.value = `${reception.device.type} ${reception.device.brand} ${reception.device.model}`;
-        modalClientIssue.value = reception.clientIssue;
-        modalWorkDone.value = reception.workDone;
+        modalDescription.value = reception.description;
+        modalSolution.value = reception.solution;
         modalReceptionAmoutDolars.value = reception.amoutDolar;
         modalStatus.value = reception.status;
 
-        modalSaintInvoice.value = (reception.payments && reception.payments.length > 0) ? reception.payments[0].saintInvoice : '';
-
+        modalSaintInvoice.value = reception.saintInvoice;
+        // modalSaintInvoice.value = (reception.payments && reception.payments.length > 0) ? reception.payments[0].saintInvoice : '';
 
         receptionDetailModal.show();
     }
@@ -161,24 +157,19 @@ document.addEventListener('DOMContentLoaded', function() {
         const updatedReception = {
             dateStart: modalDateStart.value,
             dateEnd: modalDateEnd.value || undefined,
-            clientIssue: modalClientIssue.value,
-            workDone: modalWorkDone.value,
+            description: modalDescription.value,
+            solution: modalSolution.value,
             amoutDolar: modalReceptionAmoutDolars.value,
             status: modalStatus.value
         };
 
 
-        await fetch('/api/receptions/' + id, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updatedReception)
-            })
-            .then(response => response.json())
-            .then(data => {
-                filterReceptions();
-                receptionDetailModal.hide();
+        window.API.patchData('api/receptions/' + id, JSON.stringify(updatedReception))
+            .then(response => {
+                if (response.success) {
+                    filterReceptions();
+                    receptionDetailModal.hide();
+                }
             })
             .catch(error => console.error('Error al actualizar:', error));
 

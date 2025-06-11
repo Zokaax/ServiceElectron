@@ -1,10 +1,13 @@
-import {
+const {
     contextBridge,
     ipcRenderer
-} from 'electron';
+} = require('electron');
 
 contextBridge.exposeInMainWorld('API', {
-    getData: (query) => ipcRenderer.invoke('get-data', query)
+    getData: (query) => ipcRenderer.invoke('get-data', query),
+    postData: (url, data) => ipcRenderer.invoke('post-data', url, data),
+    putData: (url, data) => ipcRenderer.invoke('put-data', url, data),
+    patchData: (url, data) => ipcRenderer.invoke('patch-data', url, data)
 
     //     // getData: (query) => ipcRenderer.invoke('get-data', query),
     //     // editItem: (item) => ipcRenderer.invoke('edit-item', item),

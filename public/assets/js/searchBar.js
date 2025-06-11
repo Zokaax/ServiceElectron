@@ -68,20 +68,18 @@ function searchBar({
     async function fetchSearch(urls, searchTerm) {
         try {
             if (!Array.isArray(urls)) {
-                const response = await fetch(`${urls}=${searchTerm}`);
-                const data = await response.json();
+                const response = await window.api.getData(`${urls}=${searchTerm}`);
+                const data = response.data;
                 return data
             }
-
             let allResults = [];
-
             const promises = urls.map(async (url) => {
-                const response = await fetch(`${url}=${searchTerm}`)
-                const msg = await response.json()
-                if (msg.success && msg.data) {
-                    allResults = allResults.concat(msg.data);
+                const response = await window.API.getData(`${url}=${searchTerm}`)
+                if (response.success && response.data) {
+                    const data = response.data
+                    allResults = allResults.concat(data);
                 }
-                return msg
+                return data
             })
 
             return {

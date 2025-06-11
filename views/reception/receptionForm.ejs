@@ -5,7 +5,6 @@
     <div class="card-body">
         <form id="addReceptionForm" autocomplete="off">
             <div class="row">
-                <!-- Columna izquierda -->
                 <div class="col-md-6">
                     <div class="mb-3 p-0">
                         <label for="receptionSaintOrder" class="form-label">Número de Pedido</label>
@@ -17,14 +16,29 @@
                         <input type="date" class="form-control" id="receptionDateStart" name="dateStart">
                     </div>
 
-                    <div class="mb-3  p-0">
+                    <div class="mb-3 p-0">
+                        <label for="receptionStatus" class="form-label">Estado</label>
+                        <div class="input-group">
+                            <select class="form-select" id="receptionStatus" name="status" required>
+                                <option value="" selected disabled>Seleccione un estado</option>
+                                <option value="EN PROCESO">EN PROCESO</option>
+                                <option value="PENDIENTE">PENDIENTE</option>
+                                <option value="COBRADO">COBRADO</option>
+                                <option value="PAGADO">PAGADO</option>
+                                <option value="GARANTIA">GARANTIA</option>
+                                <option value="DEVOLUCION">DEVOLUCION</option>
+                                <option value="OTRO">OTRO</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 p-0">
                         <label for="receptionAmoutDolars" class="form-label">Costo del servicio</label>
                         <input type="number" class="form-control" id="receptionAmoutDolars" name="amoutDolar" placeholder="Ingrese la cantidad en dolares">
                     </div>
                 </div>
 
-                <!-- Columna derecha -->
-                <div class=" col-md-6">
+                <div class="col-md-6">
                     <div class="mb-3">
                         <label for="receptionClientSearch" class="form-label">Buscar Cliente</label>
                         <div class="input-group">
@@ -43,50 +57,38 @@
                         </div>
                     </div>
 
-                    <!-- Estado del equipo -->
                     <div class="mb-3">
-                        <label for="receptionStatus" class="form-label">Estado</label>
-                        <div class="input-group">
-                            <select class="form-select" id="receptionStatus" name="status" required>
-                                <option value="" selected disabled>Seleccione un estado</option>
-                                <option value="EN PROCESO">EN PROCESO</option>
-                                <option value="PENDIENTE">PENDIENTE</option>
-                                <option value="COBRADO">COBRADO</option>
-                                <option value="PAGADO">PAGADO</option>
-                                <option value="GARANTIA">GARANTIA</option>
-                                <option value="DEVOLUCION">DEVOLUCION</option>
-                                <option value="OTRO">OTRO</option>
-                            </select>
+                        <label class="form-label">Detalles del Dispositivo:</label>
+                        <div id="deviceDescriptionContainer">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control reception-device-description-input" placeholder="Ingrese un detalle o nota del dispositivo">
+                                <button class="btn btn-outline-danger remove-reception-description" type="button"><i class="fas fa-times"></i></button>
+                            </div>
                         </div>
+                        <button type="button" id="addReceptionDescriptionField" class="btn btn-outline-secondary btn-sm mt-2">
+                            <i class="fas fa-plus me-2"></i> Añadir otro detalle
+                        </button>
                     </div>
                 </div>
-
             </div>
 
             <div class="row">
-
-                <!-- Condición del equipo -->
-                <div class="mb-3 col-6">
-                    <label for="receptionClientIssue" class="form-label">Condición del Equipo</label>
-                    <textarea class="form-control" id="receptionClientIssue" name="clientIssue" rows="4" placeholder="Describa la condición del equipo..."></textarea>
+                <div class="mb-3 col-md-6">
+                    <label for="receptionDescription" class="form-label">Descripción:</label>
+                    <textarea class="form-control" id="receptionDescription" name="description" rows="4" placeholder="Describa la condición del equipo..."></textarea>
                 </div>
 
-                <!-- Trabajo realizado -->
-                <div class="mb-3 col-6">
-                    <label for="receptionWorkDone" class="form-label">Trabajo Realizado</label>
-                    <textarea class="form-control" id="receptionWorkDone" name="workDone" rows="4" placeholder="Describa el trabajo realizado..."></textarea>
+                <div class="mb-3 col-md-6">
+                    <label for="receptionSolution" class="form-label">Solución</label>
+                    <textarea class="form-control" id="receptionSolution" name="solution" rows="4" placeholder="Describa el trabajo realizado..."></textarea>
                 </div>
             </div>
 
-
-            <!-- Botón de envío -->
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <button id="submitAddReception" class="btn btn-primary">
                     <i class="fas fa-save me-2"></i> Registrar Recepción
                 </button>
             </div>
-
-
         </form>
     </div>
 </div>

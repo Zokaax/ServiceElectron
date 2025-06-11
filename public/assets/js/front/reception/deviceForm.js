@@ -1,7 +1,7 @@
 submitForm({
     submitButtonId: 'submitAddDevice',
     formId: 'addDeviceForm',
-    postUrl: '/api/devices',
+    postUrl: 'api/devices',
     onSuccess: (data, form) => {
         if (data.success) {
             form.reset();

@@ -1,7 +1,7 @@
 submitForm({
     submitButtonId: 'submitAddPayment',
     formId: 'addPaymentForm',
-    postUrl: '/api/payments',
+    postUrl: 'api/payments',
     onSuccess: (data, form) => {
         if (data.success) {
             form.reset();
@@ -27,7 +27,7 @@ submitForm({
 });
 
 searchBar({
-    listUrl: ['/api/receptions/like?saintOrder', '/api/receptions/like?status'],
+    listUrl: ['api/receptions/like?saintOrder', 'api/receptions/like?status'],
     input: 'paymentReceptionSearch',
     container: 'searchReceptionsResults',
     configContent: (result, item) => {

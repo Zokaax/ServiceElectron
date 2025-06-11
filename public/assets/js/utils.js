@@ -57,14 +57,7 @@ async function fetchPost({
     onSuccess,
     onError
 }) {
-    return fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(json),
-        })
-        .then(response => response.json())
+    return await window.API.postData(url, JSON.stringify(json))
         .then(data => {
             onSuccess(data, form);
         })

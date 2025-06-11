@@ -1,9 +1,10 @@
 ## API
 ### recuperar informacion de las recepciones
 GET http://localhost:3000/api/receptions
-
+access:asdpfijaogifj243i5j3245908230j2poifj08u243jskdjfwjj3ij2pkmfsdf
 ### recuperar informacion de varias recepciones
-GET http://localhost:3000/api/receptions?id=1,7,6,3,2,7,8
+GET http://localhost:3000/api/receptions?id=1
+access:asdpfijaogifj243i5j3245908230j2poifj08u243jskdjfwjj3ij2pkmfsdf
 
 ### recuperar toda la informacion de las recepciones y sus dependencias
 GET http://localhost:3000/api/receptions/like?saintOrder=123
@@ -29,10 +30,11 @@ Content-Type: application/json
 
 ### enviando informacion para actualizar o agregar una recepcion
 PUT http://localhost:3000/api/receptions/2
+access:asdpfijaogifj243i5j3245908230j2poifj08u243jskdjfwjj3ij2pkmfsdf
 Content-Type: application/json
 
 {
-    "saintOrder":"123123",
+    "saintOrder":"1112",
     "dateStart":"2023-11-27",
     "dateEnd":"2024-10-27",
     "clientId":15,
@@ -43,11 +45,12 @@ Content-Type: application/json
 }
 
 ### enviando informacion para actualizar parte de una recepcion
-PATCH http://localhost:3000/api/receptions/6
+PATCH http://localhost:3000/api/receptions/1
+access:asdpfijaogifj243i5j3245908230j2poifj08u243jskdjfwjj3ij2pkmfsdf
 Content-Type: application/json
 
 {
-    "clientId":12
+    "saintOrder":"111111"
 }
 
 ### eliminar informacion de una recepcion

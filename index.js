@@ -8,8 +8,7 @@ import {
     BrowserWindow,
     ipcMain,
     Menu,
-    session,
-    ipcRenderer
+    session
 
 } from 'electron';
 import {
@@ -34,6 +33,9 @@ if (process.env.NODE_ENV !== 'production') {
     // Cargar variables de entorno
     dotenv.config();
 }
+
+app.commandLine.appendSwitch('ignore-certificate-errors');
+app.commandLine.appendSwitch('allow-insecure-localhost', 'true');
 
 // Configuración básica
 const __filename = fileURLToPath(
@@ -61,7 +63,7 @@ expressApp.use(express.static(join(__dirname, 'public')));
 // Variables globales
 let mainWindow;
 let expressServer;
-let localStorage;
+// let localStorage;
 
 const serverUrl = process.env.SERVERURL || 'http://localhost:3000/'
 const accessKey = process.env.API_ACCESS || 'Custom Key for server url'
@@ -77,7 +79,9 @@ function createWindow() {
             webPreferences: {
                 nodeIntegration: false,
                 contextIsolation: true,
-                preload: preloadPath
+                preload: preloadPath,
+                webSecurity: true,
+                allowRunningInsecureContent: false
             }
         });
 
@@ -94,7 +98,6 @@ function createWindow() {
     }
 }
 
-
 async function renderPartial(partialName, data = {}) {
     const partialPath = join('views', `${partialName}.ejs`);
     try {
@@ -107,42 +110,66 @@ async function renderPartial(partialName, data = {}) {
     }
 }
 
+async function fetchData(query) {
+    try {
+        const response = await axios.get(serverUrl + query, {
+            headers: {
+                access: accessKey
+            }
+        });
+        return response.data;
+    } catch (err) {
+        console.error('Error al obtener datos:', err);
+        return {
+            success: false,
+            error: err.message
+        };
+    }
+}
 
 // Iniciar servidor Express
 function startExpressServer() {
 
     // Front
     expressApp.get('/', async (req, res) => {
-        // const response = await axios.get(serverUrl, {
-        // headers: {
-        // access: accessKey
-        // }
-        // })
-
-
         const content = await renderPartial('panel/panel');
+        // const content = await renderPartial('reception/receptions');
         const mainData = {
             content
         };
-
-        // console.log(ipcRenderer)
-
-        const data = await ipcMain.handle('get-data')(null, 'api/clients')
-        // console.log(data)
-
         res.render('sbadmin', mainData)
-        // res.send(response.data)
     });
 
     expressApp.get('/reportes', async (req, res) => {
-        // const response = await axios.get(serverUrl + '/reports', {
-        //     headers: {
-        //         access: accessKey
-        //     }
-        // })
+        const content = await renderPartial('report/reports');
+        const mainData = {
+            content
+        };
+        res.render('sbadmin', mainData)
+    });
 
+    expressApp.get('/recepciones', async (req, res) => {
+        const content = await renderPartial('reception/receptions');
+        const mainData = {
+            content
+        };
+        res.render('sbadmin', mainData)
+    });
 
-        res.send('hi')
+    expressApp.get('/incidencias', async (req, res) => {
+        const content = await renderPartial('incident/incidents');
+        const mainData = {
+            content
+        };
+        res.render('sbadmin', mainData)
+    });
+
+    expressApp.get('/bios', async (req, res) => {
+        const content = await renderPartial('bios/bios');
+        const mainData = {
+            content
+        };
+        res.render('sbadmin', mainData)
     });
 
     // Iniciar servidor
@@ -154,27 +181,65 @@ function startExpressServer() {
 // Configurar manejadores IPC
 function setupIpcHandlers() {
 
-    ipcMain.handle('get-data', async (event, query) => {
+    ipcMain.handle('get-data', (event, query) => fetchData(query));
+
+
+    ipcMain.handle('patch-data', async (event, url, data) => {
         try {
-
-            const response = await axios.get(serverUrl + query, {
+            const response = await axios.patch(serverUrl + url, data, {
                 headers: {
-                    access: accessKey
+                    access: accessKey,
+                    'Content-Type': 'application/json'
                 }
-            })
-
-            const data = response.data;
-
-            return data
-
+            });
+            return response.data;
         } catch (err) {
-            console.error('Error al obtener datos en ipcMain.handle("get-data"):', err);
+            console.error(`Error realizar el metodo patch en ${serverUrl} con los datos ${data}`, err);
             return {
                 success: false,
                 error: err.message
             };
         }
     });
+
+    ipcMain.handle('post-data', async (event, url, data) => {
+        try {
+            const response = await axios.post(serverUrl + url, data, {
+                headers: {
+                    access: accessKey,
+                    'Content-Type': 'application/json'
+                }
+            });
+            return response.data;
+
+        } catch (err) {
+            console.error(`Error realizar el metodo post en ${serverUrl} con los datos ${data}`, err);
+            return {
+                success: false,
+                error: err.message
+            };
+        }
+    });
+
+    ipcMain.handle('put-data', async (event, url, data) => {
+        try {
+            const response = await axios.put(serverUrl + url, data, {
+                headers: {
+                    access: accessKey,
+                    'Content-Type': 'application/json'
+                }
+            });
+            return response.data;
+
+        } catch (err) {
+            console.error(`Error realizar el metodo put en ${serverUrl} con los datos ${data}`, err);
+            return {
+                success: false,
+                error: err.message
+            };
+        }
+    });
+
 }
 
 // Cuando la aplicación esté lista
@@ -187,12 +252,6 @@ app.whenReady().then(() => {
         startExpressServer();
         createWindow();
 
-        // Manejar reactivación en macOS
-        // app.on('activate', () => {
-        //     if (BrowserWindow.getAllWindows().length === 0) {
-        //         createWindow();
-        //     }
-        // });
     } catch (error) {
         console.error('Error al inicializar la aplicación:', error);
     }
