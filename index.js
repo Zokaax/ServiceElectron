@@ -119,7 +119,7 @@ async function fetchData(query) {
         });
         return response.data;
     } catch (err) {
-        console.error('Error al obtener datos:', err);
+        // console.error('Error al obtener datos:', err);
         return {
             success: false,
             error: err.message

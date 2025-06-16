@@ -6,15 +6,15 @@ submitForm({
         if (data.success) {
             form.reset();
             document.getElementById('receptionSaintOrder').focus()
-            alert('la recepcion se ha agregado exitosamente');
+            console.log('la recepcion se ha agregado exitosamente');
         } else {
             console.log(data)
-            alert(`No se ha realizado la operacion: ${data.message}`);
+            console.log(`No se ha realizado la operacion: ${data.message}`);
         }
     },
     onError: (error) => {
         console.log(error)
-        alert('No se ha podido encontrar al servidor');
+        console.log('No se ha podido encontrar al servidor');
     },
     processForm: (form) => {
         const formData = new FormData(form);
@@ -25,6 +25,7 @@ submitForm({
         jsonForm.deviceId = Number(deviceInput.dataset.id);
         deviceInput.dataset.id = undefined;
         clientInput.dataset.id = undefined;
+        jsonForm.saintOrder = jsonForm.saintOrder ? jsonForm.saintOrder : undefined
 
         const deviceDetails = [];
         document.querySelectorAll('.reception-device-description-input').forEach(input => {
@@ -35,7 +36,7 @@ submitForm({
 
         jsonForm.deviceDescription = deviceDetails
 
-        console.log(jsonForm)
+        // console.log(jsonForm)
 
         return jsonForm;
     }
@@ -57,9 +58,9 @@ searchBar({
     },
     errorRequest: (error) => {
         if (!error.errorCode == '404') {
-            console.log(error, 'element not found')
+            // console.log(error, 'element not found')
         } else if (!error.errorCode == '500') {
-            console.log(error, 'ha habido un problema con la base de datos')
+            // console.log(error, 'ha habido un problema con la base de datos')
         }
     }
 })
@@ -81,9 +82,9 @@ searchBar({
     },
     errorRequest: (error) => {
         if (!error.errorCode == '404') {
-            console.log(error, 'element not found')
+            // console.log(error, 'element not found')
         } else if (!error.errorCode == '500') {
-            console.log(error, 'ha habido un problema con la base de datos')
+            // console.log(error, 'ha habido un problema con la base de datos')
         }
     }
 })
@@ -127,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (deviceDescriptionContainer.querySelectorAll('.input-group').length > 1) {
                 e.target.closest('.input-group').remove();
             } else {
-                alert('Debe haber al menos un detalle de dispositivo.');
+                console.log('Debe haber al menos un detalle de dispositivo.');
             }
         }
     });
@@ -218,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //             if (response && !response.error) {
 //                 console.log('Recepción registrada con éxito:', response);
-//                 alert('¡Recepción registrada con éxito!');
+//                 console.log('¡Recepción registrada con éxito!');
 //                 addReceptionForm.reset(); // Limpia el formulario
 //                 // Limpiar campos de descripción y dejar solo uno vacío
 //                 deviceDescriptionContainer.innerHTML = `
@@ -229,11 +230,11 @@ document.addEventListener('DOMContentLoaded', function() {
 //                 `;
 //             } else {
 //                 console.error('Error al registrar recepción:', response.message || 'Error desconocido');
-//                 alert('Error al registrar recepción: ' + (response.message || 'Error desconocido'));
+//                 console.log('Error al registrar recepción: ' + (response.message || 'Error desconocido'));
 //             }
 //         } catch (error) {
 //             console.error('Error en la llamada a la API:', error);
-//             alert('Ocurrió un error al intentar registrar la recepción.');
+//             console.log('Ocurrió un error al intentar registrar la recepción.');
 //         }
 //     });
 // });

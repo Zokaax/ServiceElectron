@@ -24,7 +24,6 @@ function searchBar({
         }
     }, delay));
 
-
     function displayResults(results) {
         resultContainer.innerHTML = '';
         if (results.data && results.data.length > 0) {

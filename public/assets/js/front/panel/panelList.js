@@ -155,6 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
     saveReceptionChangesBtn.addEventListener('click', async () => {
         const id = parseInt(modalReceptionId.value);
         const updatedReception = {
+            saintOrder: modalSaintOrder.value,
             dateStart: modalDateStart.value,
             dateEnd: modalDateEnd.value || undefined,
             description: modalDescription.value,

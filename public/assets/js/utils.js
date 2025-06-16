@@ -19,7 +19,6 @@ function submitForm({
 
         const formData = new FormData(form);
         let jsonForm = Object.fromEntries(formData.entries());
-        console.log(jsonForm)
 
         if (processForm) {
             jsonForm = processForm(form);

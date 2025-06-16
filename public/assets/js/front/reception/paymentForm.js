@@ -6,15 +6,15 @@ submitForm({
         if (data.success) {
             form.reset();
             // document.getElementById('ReceptionSaintOrder').focus()
-            alert('el pago se ha agregado exitosamente');
+            console.log('el pago se ha agregado exitosamente');
         } else {
             console.log(data)
-            alert(`No se ha realizado la operacion: ${data.message}`);
+            console.log(`No se ha realizado la operacion: ${data.message}`);
         }
     },
     onError: (error) => {
         console.log(error)
-        alert('No se ha podido encontrar al servidor');
+        console.log('No se ha podido encontrar al servidor');
     },
     processForm: (form) => {
         const formData = new FormData(form);
@@ -44,9 +44,9 @@ searchBar({
     },
     errorRequest: (error) => {
         if (!error.errorCode == '404') {
-            console.log(error, 'element not found')
+            // console.log(error, 'element not found')
         } else if (!error.errorCode == '500') {
-            console.log(error, 'ha habido un problema con la base de datos')
+            // console.log(error, 'ha habido un problema con la base de datos')
         }
     }
 })

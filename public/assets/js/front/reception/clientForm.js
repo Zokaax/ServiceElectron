@@ -5,14 +5,14 @@ submitForm({
     onSuccess: (data, form) => {
         if (data.success) {
             form.reset();
-            alert('el cliente se ha agregado exitosamente');
+            console.log('el cliente se ha agregado exitosamente');
         } else {
             console.log(data)
-            alert(`No se ha realizado la operacion: ${data.message}`);
+            console.log(`No se ha realizado la operacion: ${data.message}`);
         }
     },
     onError: (error) => {
         console.log(error)
-        alert('No se ha podido encontrar al servidor');
+        console.log('No se ha podido encontrar al servidor');
     }
 });
